@@ -13,7 +13,6 @@ require('@/assets/js/plugins/pace/pace.min.js')
 // 引入开发所需包
 import Vue from 'vue'
 import App from './components/App'
-import Login from './components/views/Login'
 import router from './router'
 import { sync } from 'vuex-router-sync'
 import axios from 'axios'
@@ -44,9 +43,6 @@ sync(store, router)
 
 // 加载条
 const nprogress = new NProgress({ parent: '.nprogress-container' })
-
-// 如果没登陆就打开登陆页面
-const entry = store.state.authenticated ? App : Login
 
 // 路由钩子
 router.beforeEach((to, from, next) => {
