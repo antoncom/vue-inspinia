@@ -1,19 +1,33 @@
 <template>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="text-center m-t-lg">
-            <h1>
-                Welcome in INSPINIA Static SeedProject
-            </h1>
-            <small>
-                It is an application skeleton for a typical web app. You can use it to quickly bootstrap your webapp projects and dev environment for these projects.
-            </small>
-        </div>
+<div id="wrapper">
+    <nprogress-container></nprogress-container>
+    <nav-bar></nav-bar>
+
+    <div id="page-wrapper" class="gray-bg">
+        <page-top></page-top>
+        <page-main></page-main>
+        <page-footer></page-footer>
     </div>
 </div>
 </template>
 
 <script>
+import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
+import { NavBar, PageTop, PageMain, PageFooter } from '../layout'
+
+export default {
+    components: {
+        NavBar,
+        PageTop,
+        PageMain,
+        PageFooter,
+        NprogressContainer
+    },
+
+    data() {
+        return {}
+    }
+}
 </script>
 
 <style>

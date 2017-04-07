@@ -1,34 +1,13 @@
 <template>
-<div id="wrapper">
-    <nprogress-container></nprogress-container>
-    <nav-bar></nav-bar>
-
-    <div id="page-wrapper" class="gray-bg">
-        <page-top></page-top>
-        <page-main></page-main>
-        <page-footer></page-footer>
-    </div>
-</div>
+<transition name="fade" mode="out-in">
+    <router-view></router-view>
+</transition>
 </template>
 
 <script>
-import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
-import { NavBar, PageTop, PageMain, PageFooter } from './layout'
-
 export default {
+    name: 'app',
     components: {
-        NavBar,
-        PageTop,
-        PageMain,
-        PageFooter,
-        NprogressContainer
-    },
-
-    data() {
-        return {}
     }
 }
 </script>
-
-<style>
-</style>

@@ -13,6 +13,7 @@ const debug = process.env.NODE_ENV !== 'production';
 const state = {
     token: '',
     authenticated: false,
+    accountInfo: {},
     errors: errors
 };
 

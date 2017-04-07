@@ -28,7 +28,8 @@ var Cookie = tough.Cookie
 window.cookieJar = new tough.CookieJar()
 
 // 提升为全局变量
-window.Vue = Vue;
+window.Vue = Vue
+window.router = router
 
 // vue配置
 Vue.config.productionTip = false
@@ -50,7 +51,15 @@ const entry = store.state.authenticated ? App : Login
 // 路由钩子
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {
-        if (store.state.authenticated) {
+        if (sessionStorage.getItem('token')) {
+            // 将token和登陆用户信息保存到sessionStorate，因为放到store里刷新会重新登陆
+            // 如果sessionStorage里能拿到token就视为登陆，不管这个token是否过期，如果过期了，发起请求的时候会自动跳转到登陆页面
+            // 如果state里相关数据为空，但是sessionStorage里不为空，更新为sessionStorage里的数据
+            if (!store.state.authenticated) {
+                store.state.token = sessionStorage.getItem('token')
+                store.state.accountInfo = sessionStorage.getItem('accountInfo')
+                store.state.authenticated = true
+            }
             next();
         } else {
             next({
@@ -81,7 +90,7 @@ axios.defaults.withCredentials = true
 axios.interceptors.request.use(
     config => {
         if (store.state.token) {
-            config.headers.Authorization = `cloud_center ${store.state.token}`;
+            config.headers.Authorization = sessionStorage.getItem('token')
         }
         // console.log(config)
         if (config.method == 'post') {
@@ -138,8 +147,10 @@ Object.keys(filters).forEach(key => {
 })
 
 const vm = new Vue({
+    // el: '#app',
     router,
     store,
     nprogress,
-    ...entry
+    // ...App
+    render: h => h(App)
 }).$mount('#app')
