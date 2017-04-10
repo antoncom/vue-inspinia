@@ -34,15 +34,14 @@ window.router = router
 Vue.config.productionTip = false
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
 
-// TODO 使用NProgress会导致axios报错，暂时注释
-// Vue.use(NProgress)
+Vue.use(NProgress)
 Vue.use(VueAxios, axios)
 
 // store、router同步
 sync(store, router)
 
 // 加载条
-const nprogress = new NProgress({ parent: '.nprogress-container' })
+const nprogress = new NProgress(/*{ parent: '.nprogress-container' }*/)
 
 // 路由钩子
 router.beforeEach((to, from, next) => {
@@ -85,6 +84,8 @@ axios.defaults.withCredentials = true
 // http request 拦截器
 axios.interceptors.request.use(
     config => {
+        nprogress.start()
+
         if (store.state.token) {
             config.headers.Authorization = sessionStorage.getItem('token')
         }
@@ -101,6 +102,7 @@ axios.interceptors.request.use(
         return config
     },
     error => {
+        console.log(error);
         return Promise.reject(error);
     }
 );
@@ -114,6 +116,8 @@ axios.interceptors.response.use(
                 cookieJar.setCookie(Cookie.parse(c), response.config.url, function(err, cookie) {});
             });
         }
+
+        nprogress.done()
 
         return response
     },
@@ -132,7 +136,10 @@ axios.interceptors.response.use(
                     break
             }
         }
-        // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
+
+        console.log(error);
+        nprogress.done()
+
         return Promise.reject(error.response.data)
     }
 );
